@@ -63,7 +63,6 @@ export default class Game extends React.Component {
   }
 
   movePlayer(direction) {
-    console.log('pressed');
     if (direction === 'left') {
       if (this.state.movePlayerVal._value >= 20) {
         Animated.spring(
@@ -90,15 +89,15 @@ export default class Game extends React.Component {
 
   isColliding() {
     const windowH = Dimensions.get('window').height;
-    return this.state.moveAppleVal._value > windowH - 280 &&
-      this.state.moveAppleVal._value < windowH - 180 &&
-      Math.abs(this.state.moveAppleVal._value - this.state.moveAppleVal._value) < 20;
+    return this.state.moveAppleVal._value > windowH - 120 &&
+      this.state.moveAppleVal._value < windowH - 80 &&
+      Math.abs(this.state.appleStartposX - this.state.movePlayerVal._value) < 20;
   }
   animateApple() {
     this.state.moveAppleVal.setValue(-100);
     const windowW = Dimensions.get('window').width;
     // generate left distance for apple
-    this.setState({ appleStartposX: windowW * Math.random() });
+    this.setState({ appleStartposX: (windowW - 60) * Math.random() });
 
     // interval to check for collision each 50 ms
     const refreshIntervalId = setInterval(() => {
@@ -137,7 +136,6 @@ export default class Game extends React.Component {
   }
 
   render() {
-    console.log(this.state.movePlayerVal);
     return (
       <ImageBackground source={require('./img/bg.jpg')} style={styles.container} >
         <View style={{ flex: 1, marginTop: 10 }}>
