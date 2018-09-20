@@ -53,8 +53,9 @@ export default class Apple extends React.Component {
           clearInterval(refreshIntervalId);
           this.props.setGameOver();
         } else if (!this.props.isGameOver) {
-          console.log(this.props.isGameOver);
           this.props.increasePoints();
+          clearInterval(refreshIntervalId);
+          this.animateApple();
         }
       }
     }, 50);
@@ -73,12 +74,12 @@ export default class Apple extends React.Component {
       if (event.finished && this.props.isGameOver === false) {
         clearInterval(refreshIntervalId);
         this.animateApple();
-      } else {
+      } else if (this.props.isGameOver) {
         // set up a loop checking if game has restarted
         const restartIntervalId = setInterval(() => {
           if (this.props.isGameOver === false) {
-            this.animateApple();
             clearInterval(restartIntervalId);
+            this.animateApple();
           }
         }, 50);
       }

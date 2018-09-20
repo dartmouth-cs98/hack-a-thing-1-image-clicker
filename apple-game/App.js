@@ -101,6 +101,7 @@ export default class Game extends React.Component {
     const apples = [];
     for (let i = 0; i < this.state.badApples; i++) {
       apples.push(<Apple
+        key={i}
         isBad={true}
         appleSpeed={this.state.appleSpeed}
         isGameOver={this.state.gameOver}
@@ -111,6 +112,7 @@ export default class Game extends React.Component {
     }
     for (let i = 0; i < this.state.goodApples; i++) {
       apples.push(<Apple
+        key={i + this.state.badApples}
         isBad={false}
         appleSpeed={this.state.appleSpeed}
         isGameOver={this.state.gameOver}
