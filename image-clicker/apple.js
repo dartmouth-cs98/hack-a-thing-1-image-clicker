@@ -51,9 +51,9 @@ export default class Apple extends React.Component {
       if (this.isColliding()) {
         if (this.props.isBad) {
           clearInterval(refreshIntervalId);
-          this.setState({ gameOver: true });
           this.props.setGameOver();
-        } else {
+        } else if (!this.props.isGameOver) {
+          console.log(this.props.isGameOver);
           this.props.increasePoints();
         }
       }
@@ -65,7 +65,7 @@ export default class Apple extends React.Component {
     Animated.timing(
       this.state.moveAppleVal,
       {
-        toValue: Dimensions.get('window').height - 80,
+        toValue: Dimensions.get('window').height - 90,
         duration: appleSpeed,
       },
     ).start((event) => {
@@ -73,10 +73,17 @@ export default class Apple extends React.Component {
       if (event.finished && this.props.isGameOver === false) {
         clearInterval(refreshIntervalId);
         this.animateApple();
+      } else {
+        // set up a loop checking if game has restarted
+        const restartIntervalId = setInterval(() => {
+          if (this.props.isGameOver === false) {
+            this.animateApple();
+            clearInterval(restartIntervalId);
+          }
+        }, 50);
       }
     });
   }
-
 
   render() {
     return (

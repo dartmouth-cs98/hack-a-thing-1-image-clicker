@@ -55,8 +55,8 @@ export default class Game extends React.Component {
       points: 0,
       gameOver: false,
       modalVisible: false,
-      badApples: 3,
-      goodApples: 2,
+      badApples: 4,
+      goodApples: 4,
     };
   }
 
@@ -90,7 +90,7 @@ export default class Game extends React.Component {
   }
 
   gameOver = () => {
-    this.setState({ modalVisible: true });
+    this.setState({ modalVisible: true, gameOver: true });
   }
 
   restart = () => {
@@ -123,7 +123,6 @@ export default class Game extends React.Component {
   }
 
   render() {
-    console.log(this.state.modalVisible);
     return (
       <ImageBackground source={require('./img/bg.jpg')} style={styles.container} >
         <View style={{ flex: 1, marginTop: 10 }}>
@@ -152,7 +151,7 @@ export default class Game extends React.Component {
               alignItems: 'center' }}
           >
             <View>
-              <Text>You just got bad apples!</Text>
+              <Text> You got bad apples! Score:{this.state.points} </Text>
               <TouchableHighlight
                 onPress={this.restart}
                 style={{
