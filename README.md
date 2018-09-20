@@ -7,6 +7,7 @@ Apples are falling from the tree, catch it with your basket! You can move basket
 
 ## Frontend tools
 - Node - npm
+- Babel
 - React Native
 - Eslint
 - Expo
