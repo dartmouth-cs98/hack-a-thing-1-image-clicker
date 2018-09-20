@@ -6,6 +6,8 @@ import {
   Animated,
   View,
   Text,
+  Modal,
+  TouchableHighlight,
   Dimensions,
 } from 'react-native';
 import Apple from './apple';
@@ -51,15 +53,11 @@ export default class Game extends React.Component {
     this.state = {
       movePlayerVal: new Animated.Value(100),
       points: 0,
-
-      moveAppleVal: new Animated.Value(0),
-      appleStartposX: 0,
-      appleSpeed: 4000,
       gameOver: false,
+      modalVisible: false,
+      badApples: 3,
+      goodApples: 2,
     };
-  }
-  componentDidMount() {
-    this.animateApple();
   }
 
   movePlayer(direction) {
@@ -87,55 +85,45 @@ export default class Game extends React.Component {
     }
   }
 
-  isColliding() {
-    const windowH = Dimensions.get('window').height;
-    return this.state.moveAppleVal._value > windowH - 120 &&
-      this.state.moveAppleVal._value < windowH - 80 &&
-      Math.abs(this.state.appleStartposX - this.state.movePlayerVal._value) < 20;
-  }
-  animateApple() {
-    this.state.moveAppleVal.setValue(-100);
-    const windowW = Dimensions.get('window').width;
-    // generate left distance for apple
-    this.setState({ appleStartposX: (windowW - 60) * Math.random() });
-
-    // interval to check for collision each 50 ms
-    const refreshIntervalId = setInterval(() => {
-      // Collision logic
-      if (this.isColliding()) {
-        clearInterval(refreshIntervalId);
-        this.setState({ gameOver: true });
-        this.gameOver();
-      }
-    }, 50);
-
-    // increase apple speed each 20th second
-    setInterval(() => {
-      this.setState({ appleSpeed: this.state.appleSpeed - 50 });
-    }, 20000);
-
-    // Animate the apples
-    Animated.timing(
-      this.state.moveAppleVal,
-      {
-        toValue: Dimensions.get('window').height,
-        duration: this.state.appleSpeed,
-      },
-    ).start((event) => {
-      // if no collision
-      if (event.finished && this.state.gameOver === false) {
-        clearInterval(refreshIntervalId);
-        this.setState({ points: this.state.points + 1 });
-        this.animateApple();
-      }
-    });
+  increasePoints = () => {
+    this.setState({ points: this.state.points + 1 });
   }
 
-  gameOver() {
-    alert('You got bad apples!');
+  gameOver = () => {
+    this.setState({ modalVisible: true });
+  }
+
+  restart = () => {
+    this.setState({ modalVisible: false, points: 0, gameOver: false });
+  }
+
+  renderApples = () => {
+    const apples = [];
+    for (let i = 0; i < this.state.badApples; i++) {
+      apples.push(<Apple
+        isBad={true}
+        appleSpeed={this.state.appleSpeed}
+        isGameOver={this.state.gameOver}
+        movePlayerVal={this.state.movePlayerVal}
+        setGameOver={this.gameOver}
+        increasePoints={this.increasePoints}
+      />);
+    }
+    for (let i = 0; i < this.state.goodApples; i++) {
+      apples.push(<Apple
+        isBad={false}
+        appleSpeed={this.state.appleSpeed}
+        isGameOver={this.state.gameOver}
+        movePlayerVal={this.state.movePlayerVal}
+        setGameOver={this.gameOver}
+        increasePoints={this.increasePoints}
+      />);
+    }
+    return apples;
   }
 
   render() {
+    console.log(this.state.modalVisible);
     return (
       <ImageBackground source={require('./img/bg.jpg')} style={styles.container} >
         <View style={{ flex: 1, marginTop: 10 }}>
@@ -146,12 +134,36 @@ export default class Game extends React.Component {
         <Animated.Image source={require('./img/holder.jpg')} style={{ position: 'absolute', zIndex: 1, bottom: 50, transform: [{ translateX: this.state.movePlayerVal }] }}>
         </Animated.Image>
 
-        <Apple appleImg={require('./img/red.jpg')} appleStartposX={this.state.appleStartposX} moveAppleVal={this.state.moveAppleVal} />
+        {this.renderApples()}
 
         <View style={styles.controls}>
           <Text style={styles.left} onPress={() => this.movePlayer('left')}> {'<'} </Text>
           <Text style={styles.right} onPress={() => this.movePlayer('right')}> {'>'} </Text>
         </View>
+        <Modal
+          animationType="slide"
+          visible={this.state.modalVisible}
+        >
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center' }}
+          >
+            <View>
+              <Text>You just got bad apples!</Text>
+              <TouchableHighlight
+                onPress={this.restart}
+                style={{
+                  alignItems: 'center',
+                }}
+              >
+                <Text>Restart</Text>
+              </TouchableHighlight>
+            </View>
+          </View>
+        </Modal>
       </ImageBackground>
     );
   }
