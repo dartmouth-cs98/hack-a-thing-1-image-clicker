@@ -1,3 +1,3 @@
-# hack-a-thing-1-image-clicker
+# Catch the apples!
 
-# This is a React Native app 
+## Sorry for this deceptive name "image-clicker", I changed ideas midway and this is actually a mobile game.
