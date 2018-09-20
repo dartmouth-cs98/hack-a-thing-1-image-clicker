@@ -13,7 +13,7 @@ Apples are falling from the tree, catch it with your basket! You can move basket
 - Expo
 
 ## Test locally
-- run 'npm install'
+- run `npm install`
 - run `npm start`, use `i` to run ios simulator. Or use `s` to get an expo link and test on your phone.
 
 ## Author
