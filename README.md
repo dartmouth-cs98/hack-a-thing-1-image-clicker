@@ -5,7 +5,7 @@ Sorry for this deceptive repo name "image-clicker", I changed ideas midway and t
 ## Game description
 Apples are falling from the tree, catch it with your basket! You can move basket using the arrows on the left and right corner of your screen. There are both good and bad apples. You are supposed to catch the good apples and avoid the bad apples. You will gain points by catching good apples. Game will be over if you catch bad apples which are either wormy or has an evil face. You can restart the game by clicking 'restart'.
 
-See a demo of the game [here](https://vimeo.com/user89783947/review/291129551/20378f19e5)
+See a demo of the game [here](https://vimeo.com/291129551)
 
 ## Who did what
 I did the project by myself.
